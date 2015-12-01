@@ -49,12 +49,24 @@ describe('crawler tests', function () {
         it('returns a module object from a path', function () {
             expect(crawler.getModuleFromPath('app/sub/Hello.js')).toEqual({
                 path: 'app/sub/Hello',
+                rawPath: 'app/sub/Hello',
                 name: 'Hello'
             });
             expect(crawler.getModuleFromPath('/Users/stdavis/Documents/Projects/wri-web/src/app/project/test4.js',
                 '/Users/stdavis/Documents/Projects/wri-web/src')).toEqual({
                 path: 'app/project/test4',
+                rawPath: 'app/project/test4',
                 name: 'test4'
+            });
+        });
+        it('rewrites if passed a matching map', function() {
+            expect(crawler.getModuleFromPath(
+                '/Users/stdavis/Documents/Projects/wri-web/src/app/bower_components/lodash/modern/array/flatten.js',
+                '/Users/stdavis/Documents/Projects/wri-web/src',
+                {'app/bower_components/lodash/modern' : 'lodash'})).toEqual({
+                path: 'lodash/array/flatten',
+                rawPath: 'app/bower_components/lodash/modern/array/flatten',
+                name: 'flatten'
             });
         });
     });
