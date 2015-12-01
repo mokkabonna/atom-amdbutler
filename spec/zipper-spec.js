@@ -64,24 +64,49 @@ describe('zipper tests', function () {
             expect(pairs[0].path).toEqual('app/config');
             expect(pairs[1].path).toEqual('app/GeoSearch');
         });
+        it('handles matching import and params', function () {
+            var pairs = getPairs('ModuleImportSameAsParam_imports', 'ModuleImportSameAsParam_params');
+
+            expect(pairs.length).toBe(1);
+            expect(pairs[0].path).toEqual('currentSession');
+            expect(pairs[0].name).toEqual('currentSession');
+        });
     });
     describe('generateImportsText', function () {
         it('generates the appropriate imports text', function () {
-            var result = zipper.generateImportsTxt(pairs, '    ');
+            var result = zipper.generateImportsTxt(pairs, '    ', true);
             var expected = fs.readFileSync(path.join(__dirname, 'data', 'imports_txt'), readOptions);
+
+            expect(result).toEqual(expected);
+        });
+        it('generates the appropriate imports text with no package separation', function () {
+            var result = zipper.generateImportsTxt(pairs, '    ', false);
+            var expected = fs.readFileSync(path.join(__dirname, 'data', 'imports_txt_no_separation'), readOptions);
 
             expect(result).toEqual(expected);
         });
     });
     describe('generateParamsTxt', function () {
         it('generates the appropriate params text', function () {
-            var result = zipper.generateParamsTxt(pairs, '    ', false);
+            var result = zipper.generateParamsTxt(pairs, '    ', false, true);
             var expected = fs.readFileSync(path.join(__dirname, 'data', 'params_txt'), readOptions);
 
             expect(result).toEqual(expected);
         });
+        it('generates the appropriate params text with no package separation', function () {
+            var result = zipper.generateParamsTxt(pairs, '    ', false, false);
+            var expected = fs.readFileSync(path.join(__dirname, 'data', 'params_txt_no_separation'), readOptions);
+
+            expect(result).toEqual(expected);
+        });
         it('supports oneline option', function () {
-            var result = zipper.generateParamsTxt(pairs, '    ', true);
+            var result = zipper.generateParamsTxt(pairs, '    ', true, true);
+            var expected = fs.readFileSync(path.join(__dirname, 'data', 'params_txt_oneline'), readOptions);
+
+            expect(result).toEqual(expected);
+        });
+        it('supports oneline option, ignores no separation option', function () {
+            var result = zipper.generateParamsTxt(pairs, '    ', true, false);
             var expected = fs.readFileSync(path.join(__dirname, 'data', 'params_txt_oneline'), readOptions);
 
             expect(result).toEqual(expected);
