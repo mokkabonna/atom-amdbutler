@@ -69,6 +69,16 @@ describe('crawler tests', function () {
                 name: 'flatten'
             });
         });
+        it('rewrites if passed a matching map, and uses correct package name', function() {
+            expect(crawler.getModuleFromPath(
+                '/Users/stdavis/Documents/Projects/wri-web/src/app/bower_components/lodash/modern/foo/string.js',
+                '/Users/stdavis/Documents/Projects/wri-web/src',
+                {'app/bower_components/lodash/modern' : 'lodash'})).toEqual({
+                path: 'lodash/foo/string',
+                rawPath: 'app/bower_components/lodash/modern/foo/string',
+                name: 'lodashString'
+            });
+        });
     });
     describe('removeModule', function () {
         it('removes a module from the list', function () {
